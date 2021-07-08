@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    compile(
+            'io.jaegertracing:jaeger-client:1.5.0',
+            'io.jaegertracing:jaeger-thrift:1.5.0',
+            'io.jaegertracing:jaeger-tracerresolver:1.5.0',
+            'org.apache.thrift:libthrift:0.13.0',
+            'io.opentracing:opentracing-api:0.33.0',
+            'io.opentracing:opentracing-util:0.33.0',
+            'org.slf4j:slf4j-api:1.7.28'
+    )
+
+}
+
+configurations {
+    compile.exclude module: 'annotations'
+    compile.exclude module: 'commons-codec'
+    compile.exclude module: 'commons-logging'
+    compile.exclude module: 'httpclient'
+    compile.exclude module: 'httpcore'
+    compile.exclude module: 'javax.annotation-api'
+    compile.exclude module: 'kotlin-stdlib'
+    compile.exclude module: 'kotlin-stdlib-common'
+    compile.exclude module: 'okhttp'
+    compile.exclude module: 'okio-jvm'
+    compile.exclude module: 'opentracing-noop'
+    compile.exclude module: 'opentracing-tracerresolver'
+
+}
+task copyLibs(type: Copy, dependsOn: clean) {
+    into "build"
+    from configurations.compile
+}
+test {
+    useJUnitPlatform()
+}
